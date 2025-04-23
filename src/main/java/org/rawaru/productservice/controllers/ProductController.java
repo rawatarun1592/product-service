@@ -1,11 +1,13 @@
 package org.rawaru.productservice.controllers;
 
-import org.rawaru.productservice.dtos.CreateProductRequestDto;
-import org.rawaru.productservice.dtos.CreateProductResponseDto;
+import org.rawaru.productservice.dtos.*;
 import org.rawaru.productservice.models.Product;
 import org.rawaru.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -25,7 +27,15 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public void getAllProducts() {
+    public GetAllProductsResponse getAllProducts() {
+        List<Product> products = productService.getAllProducts();
+        GetAllProductsResponse response = new GetAllProductsResponse();
+        List<GetProductDto> getProductDtos = new ArrayList<>();
+        for(Product product : products) {
+            getProductDtos.add(GetProductDto.fromProduct(product));
+        }
+        response.setProducts(getProductDtos);
+        return response;
 
     }
 
